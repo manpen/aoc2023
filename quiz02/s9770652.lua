@@ -16,5 +16,5 @@ for line in io.lines("s9770652.txt") do
     powers = powers + max.red * max.green * max.blue
 end
 
-print(("Die Summe der IDs betr„gt %d."):format(ids))
-print(("Die Summe der M„chtigkeiten betr„gt %d."):format(powers))
+print(("Die Summe der IDs betraegt %d."):format(ids))
+print(("Die Summe der Maechtigkeiten betraegt %d."):format(powers))
