@@ -14,11 +14,11 @@ function GetLineNumber(line, textToNumber)
     return tonumber(line:match("%d") .. line:match(".*(%d)"))
 end
 
-local sums = {0, 0}
+local sums = { 0, 0 }
 for line in io.lines("s9770652.txt") do
     sums[1] = sums[1] + GetLineNumber(line)
     sums[2] = sums[2] + GetLineNumber(line, true)
 end
 
-print("Ohne Textkonvertierung betraegt die Summe " .. tostring(sums[1]) .. ".")
-print("Mit Textkonvertierung betraegt die Summe " .. tostring(sums[2]) .. ".")
+print(("Ohne Textkonvertierung betraegt die Summe %d."):format(sums[1]))
+print(("Mit Textkonvertierung betraegt die Summe %d."):format(sums[2]))
