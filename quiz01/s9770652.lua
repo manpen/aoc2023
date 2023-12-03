@@ -2,7 +2,7 @@ function GetLineNumber(line, textToNumber)
     if textToNumber then
         line = line
             :gsub("one", "o1e")
-            :gsub("two", "t2")
+            :gsub("two", "t2o")
             :gsub("three", "t3e")
             :gsub("four", "4")
             :gsub("five", "5e")
