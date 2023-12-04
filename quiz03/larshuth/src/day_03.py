@@ -39,7 +39,7 @@ if __name__ == '__main__':
                         number = ''
                         break
                 number = ''
-            if pos == line_length and number != '':
+            if pos == (line_length - 1) and number != '':
                 for check in range(max(start_pos - 1, 0), pos + 1):
                     if (previous[check] not in numbers_and_dot) or (current[check] not in numbers_and_dot) or (
                             next[check] not in numbers_and_dot):
