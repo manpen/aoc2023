@@ -19,6 +19,7 @@ for line in io.lines("s9770652.txt") do
     -- Score the current scratch card.
     maxN = maxN + 1
     copies[maxN] = (copies[maxN] or 0) + 1
+    cards = cards + copies[maxN]
     if luckyNumbers > 0 then
         points = points + 2^(luckyNumbers-1)
         for i = maxN + 1, maxN + luckyNumbers do
@@ -28,8 +29,4 @@ for line in io.lines("s9770652.txt") do
 end
 
 print(("Die Summe aller Punkte betraegt %d."):format(points))  -- solution of first part
-
-for _, number in pairs(copies) do
-    cards = cards + number
-end
-print(("Die Summe aller Karten betraegt %d."):format(cards))  -- solution of second part
+print(("Die Anzahl aller Karten betraegt %d."):format(cards))  -- solution of second part
