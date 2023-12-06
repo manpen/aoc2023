@@ -7,11 +7,11 @@ for line in io.lines("s9770652.txt") do
     local colon, _ = line:find(":")  -- The colon separates winning cards from the card name.
     local pipe, _ = line:find("|")  -- The pipe character separates winning cards from actual ones.
     local winning = {}
-    for i in line:sub(colon, pipe):gmatch("(%d+)") do
+    for i in line:sub(colon, pipe):gmatch("%d+") do
         winning[i] = true
     end
     local luckyNumbers = 0
-    for i in line:sub(pipe):gmatch("(%d+)") do
+    for i in line:sub(pipe):gmatch("%d+") do
         if winning[i] then
             luckyNumbers = luckyNumbers + 1
         end
