@@ -1,10 +1,4 @@
-function ReadFile()
-    local lines = {}
-    for line in io.lines("s9770652.txt") do
-        lines[#lines+1] = line
-    end
-    return lines
-end
+dofile "..\\quiz01\\s9770652_commons.lua"
 
 -- Returns an array of pairs which indicate the first and last values of the seed ranges.
 -- Set `ranges` to true to generate the ranges according to the second part of the quiz.
@@ -95,7 +89,7 @@ function GetSmallestLocation(rules, seeds)
     return min
 end
 
-local lines = ReadFile()
+local lines = ReadAllLines()
 local rules = GetRules(lines)
 
 local seeds = GetSeeds(lines[1])
