@@ -2,6 +2,7 @@ dofile "..\\quiz01\\s9770652_commons.lua"
 
 local TYPES = Enum{"HIGH_CARD", "ONE_PAIR", "TWO_PAIR", "THREE_OF_A_KIND", "FULL_HOUSE",
         "FOUR_OF_A_KIND", "FIVE_OF_A_KIND"}
+local CARDS = Enum{"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"}
 
 -- Returns a single digit representing the type of a hand.
 -- The better the type, the higher the digit.
@@ -36,8 +37,7 @@ end
 -- The highest digit represents the type.
 -- The better the original hand, the higher the numerical representation.
 local function ConvertCards(hands, wildcards)
-    local digits = EnumToStrings(Enum{  -- Each card is turned into two digits.
-            "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"})
+    local digits = EnumToStrings(CARDS)  -- Each card is turned into two digits.
     if wildcards then digits.J = "00" end
     local convertedHands = {}
     for i, hand in ipairs(hands) do
