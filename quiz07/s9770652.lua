@@ -1,35 +1,20 @@
 dofile "..\\quiz01\\s9770652_commons.lua"
 
-local TYPES = Enum{"HIGH_CARD", "ONE_PAIR", "TWO_PAIR", "THREE_OF_A_KIND", "FULL_HOUSE",
-        "FOUR_OF_A_KIND", "FIVE_OF_A_KIND"}
 local CARDS = Enum{"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"}
 
 -- Returns a single digit representing the type of a hand.
 -- The better the type, the higher the digit.
 local function GetType(cards, wildcards)
     local labels = cards:count()  -- Count the occurrences of each label.
-    if wildcards and labels.J and labels.J < 5 then  -- no need for conversion if no or only Jokers
-        local jokerCount = labels.J
-        labels.J = nil
-        local _, maxTuple = table.maxv(labels)  -- most common card (except for Clown Prince of Crime)
-        labels[maxTuple] = labels[maxTuple] + jokerCount
+    local jokerCount = (wildcards and labels.J) or 0  -- 0 if no wildcards or no Jokers
+    if jokerCount == 5 then  -- Return 'Five of a kind' prematurely.
+        return 50
     end
-    local tuples = table.count(labels)  -- Count the occurrences of each tuple size.
-    -- Score the tuples.
-    if tuples[5] then
-        return TYPES.FIVE_OF_A_KIND
-    elseif tuples[4] then
-        return TYPES.FOUR_OF_A_KIND
-    elseif tuples[3] and tuples[2] then
-        return TYPES.FULL_HOUSE
-    elseif tuples[3] then
-        return TYPES.THREE_OF_A_KIND
-    elseif tuples[2] == 2 then
-        return TYPES.TWO_PAIR
-    elseif tuples[2] == 1 then
-        return TYPES.ONE_PAIR
-    end
-    return TYPES.HIGH_CARD
+    labels.J = (not wildcards or nil) and labels.J  -- Remove Jokers only if wildcards allowed.
+    local tuples = table.collect(labels)  -- Boils `labels` neatly down to a series of numbers.
+    table.sort(tuples)
+    tuples[#tuples] = tuples[#tuples] + jokerCount  -- Turn Clown Prince of Crime into most common card.
+    return tuples[#tuples] .. (tuples[#tuples-1] or 0)
 end
 
 -- Returns an array of tuples `{ hand, bid }`,
@@ -41,7 +26,7 @@ local function ConvertCards(hands, wildcards)
     if wildcards then digits.J = "00" end
     local convertedHands = {}
     for i, hand in ipairs(hands) do
-        local conv = tostring(GetType(hand[1], wildcards))
+        local conv = GetType(hand[1], wildcards)
         for card in hand[1]:gmatch"." do
             conv = conv .. digits[card]
         end
