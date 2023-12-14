@@ -9,6 +9,39 @@ function ReadAllLines(file)
     return lines
 end
 
+-- Returns a table of matrices if multiple matrices are present, else only a matrix directly.
+function FileToMatrix(file, comp, method)
+    local lines = ReadAllLines(file)
+    local matrices = { {} }
+    local m = 1
+    local row = 0
+    for i = 1, #lines do
+        if lines[i] == "" then
+            m = m + 1
+            row = 0
+            matrices[m] = {}
+        else
+            row = row + 1
+            matrices[m][row] = lines[i]:totable(comp, method)
+        end
+    end
+    if #matrices == 1 then
+        return matrices[1]
+    end
+    return matrices
+end
+
+function PrintMatrix(matrix)
+    local output = ""
+    for row = 1, #matrix do
+        for col = 1, #matrix[row] do
+            output = output .. matrix[row][col]
+        end
+        output = output .. "\n"
+    end
+    print(output)
+end
+
 function Enum(t)
     local enum = {}
     for k, v in ipairs(t) do
@@ -40,6 +73,10 @@ function string.totable(s, comp, method)
     return t
 end
 
+function string.split(s, method)
+    return s:totable("%S+", method)
+end
+
 function string.count(s, comp)
     comp = comp or "."
     local counts = {}
@@ -47,6 +84,16 @@ function string.count(s, comp)
         counts[c] = (counts[c] or 0) + 1
     end
     return counts
+end
+
+function table.collect(t)
+    local collection = {}
+    local i = 0
+    for _, v in pairs(t) do
+        i = i + 1
+        collection[i] = v
+    end
+    return collection
 end
 
 function table.count(t)
@@ -68,6 +115,26 @@ function table.maxv(t)
     return maxval, key
 end
 
+function table.sum(t)
+    local sum = 0
+    for _, v in ipairs(t) do
+        sum = sum + v
+    end
+    return sum
+end
+
+function deepcopy(t)
+    local copied = {}
+    if type(t) == "table" then
+        for k, v in pairs(t) do
+            copied[k] = deepcopy(v)
+        end
+    else
+        copied = t
+    end
+    return copied
+end
+
 -- taken from: https://rosettacode.org/wiki/Least_common_multiple#Lua
 function gcd(m, n)
     while n ~= 0 do
@@ -80,7 +147,7 @@ end
 
 -- taken from: https://rosettacode.org/wiki/Least_common_multiple#Lua
 function lcm(m, n)
-    return ( m ~= 0 and n ~= 0 ) and m * n / gcd( m, n ) or 0
+    return ( m ~= 0 and n ~= 0 ) and m * n / gcd(m, n) or 0
 end
 
 -- taken from: https://stackoverflow.com/a/8695525
