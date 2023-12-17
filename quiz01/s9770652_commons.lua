@@ -152,6 +152,29 @@ function dump(o)
     end
 end
 
+---@class Cache3D
+Cache3D = {}
+
+---@type fun(self: Cache3D, obj?: table) : Cache3D
+function Cache3D:new(obj)
+    obj = obj or {}
+    setmetatable(obj, self)
+    self.__index = self
+    return obj
+end
+
+---@type fun(self: Cache3D, tocache: number, i: number, j: number, k: number)
+function Cache3D:cache(tocache, i, j, k)
+    if not self[i] then self[i] = {} end
+    if not self[i][j] then self[i][j] = {} end
+    self[i][j][k] = tocache
+end
+
+---@type fun(self: Cache3D, i: number, j: number, k: number) : number|nil
+function Cache3D:getCached(i, j, k)
+    return self[i] and self[i][j] and self[i][j][k]
+end
+
 ------------------------
 -- Matrix Operations. --
 ------------------------
