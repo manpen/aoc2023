@@ -40,8 +40,9 @@ function string.totable(s, comp, method)
     return t
 end
 
-function string.split(s, method)
-    return s:totable("%S+", method)
+function string.split(s, comp, method)
+    comp = comp or "%s"
+    return s:totable("[^"..comp.."]+", method)
 end
 
 function string.count(s, comp)
@@ -151,6 +152,10 @@ function dump(o)
        return tostring(o)
     end
 end
+
+-------------
+-- Cache3D --
+-------------
 
 ---@class Cache3D
 Cache3D = {}
