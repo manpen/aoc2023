@@ -54,6 +54,14 @@ function string.count(s, comp)
     return counts
 end
 
+function string.endswith(s, ending)
+    return ending == "" or s:sub(-#ending) == ending
+end
+
+function string.startswith(s, start)
+    return s:sub(1, #start) == start
+end
+
 function table.collect(t)
     local collection = {}
     local i = 0
@@ -151,6 +159,32 @@ function dump(o)
     else
        return tostring(o)
     end
+end
+
+-------------
+-- Cache2D --
+-------------
+
+---@class Cache2D
+Cache2D = {}
+
+---@type fun(self: Cache2D, obj?: table) : Cache2D
+function Cache2D:new(obj)
+    obj = obj or {}
+    setmetatable(obj, self)
+    self.__index = self
+    return obj
+end
+
+---@type fun(self: Cache2D, tocache: number|boolean, i: number, j: number)
+function Cache2D:cache(tocache, i, j)
+    if not self[i] then self[i] = {} end
+    self[i][j] = tocache
+end
+
+---@type fun(self: Cache2D, i: number, j: number) : number|boolean|nil
+function Cache2D:getCached(i, j)
+    return self[i] and self[i][j]
 end
 
 -------------
