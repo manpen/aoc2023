@@ -214,9 +214,55 @@ function Cache3D:getCached(i, j, k)
     return self[i] and self[i][j] and self[i][j][k]
 end
 
-------------------------
--- Matrix Operations. --
-------------------------
+-------------------------------
+-- Union-Find Data Structure --
+-------------------------------
+
+---@class UFDS
+UFDS = { size = nil, parent = {}, rank = {} }
+
+---@type fun(self: UFDS, obj?: table) : UFDS
+function UFDS:new(obj)
+    obj = obj or {}
+    setmetatable(obj, self)
+    self.__index = self
+    return obj
+end
+
+---@type fun(self: UFDS, size: number)
+function UFDS:setSize(size)
+    self.size = size
+    for i = 1, size do
+        self.parent[i] = i
+        self.rank[i] = 0
+    end
+end
+
+---@type fun(self: UFDS, node: number) : number
+function UFDS:find(node)
+    if self.parent[node] == node then
+        return node
+    end
+    local p = self:find(self.parent[node])
+    self.parent[node] = p
+    return p
+end
+
+---@type fun(self: UFDS, node1: number, node2: number)
+function UFDS:union(node1, node2)
+    local p1, p2 = self:find(node1), self:find(node2)
+    if self.rank[p1] < self.rank[p2] then
+        p1, p2 = p2, p1
+    end
+    self.parent[p2] = p1
+    if self.rank[p1] == self.rank[p2] then
+        self.rank[p1] = self.rank[p1] + 1
+    end
+end
+
+-----------------------
+-- Matrix Operations --
+-----------------------
 
 -- Returns a table of matrices if multiple matrices are present, else only a matrix directly.
 function FileToMatrix(file, comp, method)
