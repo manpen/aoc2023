@@ -40,7 +40,7 @@ end
 
 -- Counts how many tunnels are between any two nodes.
 -- Their number is the weight of the edge between those two nodes.
-local function directEdges(matrix, V, rows, cols, slopes)
+local function getEdges(matrix, V, rows, cols, slopes)
     local E = {}; for vi = 1, #V do E[vi] = {} end
     for vi, v in ipairs(V) do
         local seen = Cache2D:new()  -- tile visited in this round?
@@ -74,12 +74,12 @@ end
 
 -- A recursive depth-first search.
 -- Yes, even for part 2 I just brute-force through every possible path.
-local function findLongestPath(V, E)
+local function findLongestPath(E)
     local maxLength = 0
     local seen = {}
     local function dfs(vi, dist)
         if seen[vi] then return end
-        if vi == #V then
+        if vi == #E then
             maxLength = math.max(maxLength, dist)
             return
         end
@@ -95,7 +95,7 @@ end
 
 local matrix, rows, cols = FileToMatrix()
 local V = getNodes(matrix, rows, cols)
-local E = directEdges(matrix, V, rows, cols, true)
-print(("Der laengste Weg mit Schlittereinlagen ist %d LE lang."):format(findLongestPath(V, E)))  -- solution of first part
-E = directEdges(matrix, V, rows, cols, false)
-print(("Der laengste Weg ohne Schlittereinlagen ist %d LE lang."):format(findLongestPath(V, E)))  -- solution of second part
+local E = getEdges(matrix, V, rows, cols, true)
+print(("Der laengste Weg mit Schlittereinlagen ist %d LE lang."):format(findLongestPath(E)))  -- solution of first part
+E = getEdges(matrix, V, rows, cols, false)
+print(("Der laengste Weg ohne Schlittereinlagen ist %d LE lang."):format(findLongestPath(E)))  -- solution of second part
